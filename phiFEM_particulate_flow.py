@@ -2,14 +2,16 @@
 from __future__ import print_function
 import numpy as np
 from dolfin import *
-import sympy
 import matplotlib.pyplot as plt
 parameters['allow_extrapolation'] = True
 parameters["form_compiler"]["representation"] = 'uflacs'
 from mshr import *
 from multiphenics import *
+import os
 parameters["ghost_mode"] = "shared_facet" 
 
+if not os.path.exists("output"):
+    os.makedirs("output")
 
 # Number of rellienement
 Iter_standard = 5
@@ -335,12 +337,14 @@ for i in range(Iter_standard):
 
 	# Computation of the error
 	#u_exact = interpolate(u_exact,V_u)
-	norm_L2_u_exact =assemble(inner(u_exact,u_exact)*dx)**0.5
-	norm_H1_u_exact =assemble(grad(u_exact)**2*dx)**0.5
-	norm_L2_p_exact =assemble(p_exact**2*dx)**0.5
-	err_L2 = assemble((u-u_exact)**2*dx)**0.5/norm_L2_u_exact
-	err_H1 = assemble((grad(u-u_exact))**2*dx)**0.5/norm_H1_u_exact
-	err_p = assemble((p-p_exact)**2*dx)**0.5/norm_L2_p_exact
+	norm_L2_u_exact =assemble(inner(u_exact,u_exact)*dx_exact)**0.5
+	norm_H1_u_exact =assemble(inner(grad(u_exact), grad(u_exact))*dx_exact)**0.5
+	norm_L2_p_exact =assemble(p_exact**2*dx_exact)**0.5
+	u_mesh_exact = interpolate(u, V_u_exact)
+	err_L2 = assemble((u_mesh_exact-u_exact)**2*dx_exact)**0.5/norm_L2_u_exact
+	err_H1 = assemble((grad(u_mesh_exact-u_exact))**2*dx_exact)**0.5/norm_H1_u_exact
+	p_mesh_exact = interpolate(p, V_p_exact)
+	err_p = assemble((p_mesh_exact-p_exact)**2*dx_exact)**0.5/norm_L2_p_exact
 	size_mesh_standard_vec[i] = mesh.hmax()
 	error_u_L2_standard_vec[i] = err_L2
 	error_u_H1_standard_vec[i] = err_H1
