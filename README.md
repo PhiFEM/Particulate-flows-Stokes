@@ -22,7 +22,7 @@ The image is based on the legacy FEniCS image: quay.io/fenicsproject/stable:2019
    
    ```bash
    mkdir stokes-phifem/
-   git clone https://github.com/PhiFEM/Particulate-flows-Stokes.git stokes-phifem
+   git clone https://github.com/PhiFEM/publication_Particulate-flows-Stokes_multiphenics.git stokes-phifem
    ```
 
 2) Download the images from the docker.io registry, in the main directory:
