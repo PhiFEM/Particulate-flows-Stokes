@@ -2,14 +2,16 @@
 from __future__ import print_function
 import numpy as np
 from dolfin import *
-import sympy
 import matplotlib.pyplot as plt
 parameters['allow_extrapolation'] = True
 parameters["form_compiler"]["representation"] = 'uflacs'
 from mshr import *
 from multiphenics import *
+import os
 parameters["ghost_mode"] = "shared_facet" 
 
+if not os.path.exists("output"):
+    os.makedirs("output")
 
 # Number of rellienement
 Iter_standard = 5
